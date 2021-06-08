@@ -6,35 +6,35 @@ import numpy as np
 import argparse
 import cv2
 
-# initialize the number of epochs to train for, initial learning rate and batch size
-EPOCHS = 25
+# We have to straighten the learning rate by hand to avoid suboptimal converge of our model
+EPOCHS = 20
 INIT_LR = 1e-3
 BS = 32
 
-# We use MNIST dataset as default here
+# We use the MNIST dataset as default here
 print("[INFO] loading MNIST dataset...")
 ((trainX, _), (testX, _)) = mnist.load_data()
 
-# add a channel dimension to every image in the dataset, then scale
+# Add a channel dimension to every image in the dataset, then scale
 # the pixel intensities to the range [0, 1]
 trainX = np.expand_dims(trainX, axis=-1)
 testX = np.expand_dims(testX, axis=-1)
 trainX = trainX.astype("float32") / 255.0
 testX = testX.astype("float32") / 255.0
 
-# construct our convolutional autoencoder
+# Construct our convolutional autoencoder
 print("[INFO] building autoencoder...")
-(encoder, decoder, autoencoder) = Autoencoder.build(28, 28, 1)
-opt = Adam(lr=1e-3)
+autoencoder = Autoencoder.build(28, 28, 1)
+opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)
 autoencoder.compile(loss="mse", optimizer=opt)
 
-# train the convolutional autoencoder
+# Train the convolutional autoencoder (it might take some time)
 H = autoencoder.fit(
 	trainX, trainX,
 	validation_data=(testX, testX),
 	epochs=EPOCHS,
 	batch_size=BS)
 
-# serialize the autoencoder model to disk
+# Finally, we can serialize the autoencoder model to disk
 print("[INFO] saving autoencoder...")
-autoencoder.save("autoencoder.h5", save_format="h5")
+autoencoder.save("autoencoder.h5")
