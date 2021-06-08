@@ -21,7 +21,7 @@ fn main() -> std::io::Result<()> {
                 .status()?;
 
         Command::new("python3")
-                .arg("./../../../backend/compute_feature_vector.py")
+                .arg("./../../../backend/compute_feature_vectors.py")
                 .status()?;
     }
 
