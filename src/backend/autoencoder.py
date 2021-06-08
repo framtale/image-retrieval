@@ -9,6 +9,7 @@ from tensorflow.keras.layers import Reshape
 from tensorflow.keras.layers import Input
 from tensorflow.keras.models import Model
 from tensorflow.keras import backend as K
+from keras.utils.vis_utils import plot_model
 import numpy as np
 
 class Autoencoder:
@@ -54,5 +55,7 @@ class Autoencoder:
 
 		# construct our autoencoder model
 		autoencoder = Model(inputs, outputs, name="autoencoder")
+
+		plot_model(autoencoder, to_file="../../../../visualisation/autoencoder.png", show_shapes=True, show_layer_names=True)
 
 		return autoencoder
