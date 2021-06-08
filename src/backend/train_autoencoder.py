@@ -35,6 +35,18 @@ H = autoencoder.fit(
 	epochs=EPOCHS,
 	batch_size=BS)
 
+# Plot training loss and accuracy
+N = np.arange(0, EPOCHS)
+plt.style.use("ggplot")
+plt.figure()
+plt.plot(N, H.history["loss"], label="train_loss")
+plt.plot(N, H.history["val_loss"], label="val_loss")
+plt.title("Training Loss and Accuracy")
+plt.xlabel("Epoch #")
+plt.ylabel("Loss/Accuracy")
+plt.legend(loc="lower left")
+plt.savefig("../../../../visualisation/training_history.png")	
+
 # Finally, we can serialize the autoencoder model to disk
 print("[INFO] saving autoencoder...")
 autoencoder.save("autoencoder.h5")
