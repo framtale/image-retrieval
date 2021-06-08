@@ -15,7 +15,7 @@ struct SearchEngine {
 fn main() -> std::io::Result<()> {
     // We have to check whether we already trained our autoencoder.
     // If this isn't the case, we have to train it and compute the feature vectors
-    if !Path::new("../../../backend/autoencoder.h5").exists() {
+    if !Path::new("autoencoder.h5").exists() {
         Command::new("python3")
                 .arg("./../../../backend/train_autoencoder.py")
                 .status()?;
@@ -25,5 +25,8 @@ fn main() -> std::io::Result<()> {
                 .status()?;
     }
 
+    Command::new("python3")
+            .arg("./../../../backend/image_search.py")
+            .status()?;
     Ok(())
 }
