@@ -2,6 +2,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.models import load_model
 from tensorflow.keras.datasets import mnist
 import numpy as np
+import pickle
 import json
 
 # We use the MNIST dataset as default again
@@ -26,12 +27,13 @@ print("[INFO] encoding images...")
 features = encoder.predict(trainX)
 
 # Construct a dictionary that maps the index of the MNIST training
-# image to its corresponding latent-space representation
+# image to its corresponding vector representation
 indexes = list(range(0, trainX.shape[0]))
 
 data = {"indexes": indexes, "features": features}
+
 # Write the data dictionary to disk
 print("[INFO] saving index...")
-
-with open('feature_vectors.json', 'w') as fp:
-    json.dump(data, fp)
+file = open("feature_vectors.pickle", "wb")
+file.write(pickle.dumps(data))
+file.close()
